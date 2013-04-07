@@ -1,4 +1,3 @@
-
 #coding=utf-8
 import os
 
@@ -10,37 +9,35 @@ htmlfiles= filter(lambda f:os.path.splitext(f)[1]=='.html',files)
 print htmlfiles
 #htmlfiles.sort()
 
-for hf in htmlfiles:
-  print hf.__class__
+
 
 import HTMLParser
-txtfile=open('text.txt','w')
+#txtfile=open('text.txt','w')
 class MyHTMLParser(HTMLParser.HTMLParser):
-    towrite=False
+    titled=False
+
     def handle_starttag(self, tag, attrs):
-        print "Start tag:", tag
         if tag=='br':
-          txtfile.write('\n')
-        for attr in attrs:
-            print "     attr:", attr
-            if attr==('id','content'):
-              self.towrite=True
+          self.txtfile.write('\n')
+
     def handle_endtag(self, tag):
-        print "End tag  :", tag
         if tag=='html':
-          txtfile.close()
-        
+          self.txtfile.close()
+        if tag=='title':
+            self.titled=True
     def handle_data(self, data):
-        print "Data     :", self.get_starttag_text()
+       # print "Data     :", self.get_starttag_text()
         if self.get_starttag_text()=='<span id="PagePosition1_lab_Current">':
-          txtfile.write(data)
+          self.txtfile.write(data)
         if self.get_starttag_text()=='<div id="content" style="font-size: 14px;">':
-          txtfile.write(data)
+          self.txtfile.write(data)
         if self.get_starttag_text()=='<br>':
-          txtfile.write('\n  '+data)
-        if self.get_starttag_text()=='<title>':
-         # txtfile=open(unicode(data+'.txt',utf8),'w')
-          print '----------------------------'+data
+          self.txtfile.write('\n\t'+data)
+        if self.get_starttag_text()=='<title>' and not self.titled:
+          print '----------------------------'+data+'****'
+          print type(data)
+          self.txtfile=open(data.decode('utf8')+'.txt','w')
+"""
     def handle_comment(self, data):
         print "Comment  :", data
  
@@ -53,12 +50,13 @@ class MyHTMLParser(HTMLParser.HTMLParser):
     def handle_decl(self, data):
         print "Decl     :", data
         
+"""
 
-#import codecs
-
-g=MyHTMLParser()
-fff=open('1062438.html','r')
-hh=fff.read()
-fff.close()
-print type(hh)
-#g.feed(hh)
+for hf in htmlfiles:
+    print '-----------'+hf.decode('gb2312')
+    g=MyHTMLParser()
+    fff=open(hf.decode('gb2312'),'r')
+    hh=fff.read()
+    fff.close()
+    #print hh
+    g.feed(hh)
