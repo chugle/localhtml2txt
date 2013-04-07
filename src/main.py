@@ -1,4 +1,7 @@
 #coding=utf-8
+'''
+put it in the floder of html files,and run it,it will change them into txt files
+'''
 import os
 
 files=os.listdir(os.getcwd())
@@ -29,7 +32,7 @@ class MyHTMLParser(HTMLParser.HTMLParser):
        # print "Data     :", self.get_starttag_text()
         if self.get_starttag_text()=='<span id="PagePosition1_lab_Current">':
           self.txtfile.write(data)
-        if self.get_starttag_text()=='<div id="content" style="font-size: 14px;">':
+        if str(self.get_starttag_text()).find('content'):
           self.txtfile.write(data)
         if self.get_starttag_text()=='<br>':
           self.txtfile.write('\n\t'+data)
