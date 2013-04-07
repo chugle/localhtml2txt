@@ -1,8 +1,4 @@
-'''
-Created on 2013-4-7
 
-@author: Administrator
-'''
 #coding=utf-8
 import os
 
