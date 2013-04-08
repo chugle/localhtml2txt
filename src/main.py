@@ -30,16 +30,17 @@ class MyHTMLParser(HTMLParser.HTMLParser):
             self.titled=True
     def handle_data(self, data):
        # print "Data     :", self.get_starttag_text()
-        if self.get_starttag_text()=='<span id="PagePosition1_lab_Current">':
-          self.txtfile.write(data)
-        if str(self.get_starttag_text()).find('content'):
-          self.txtfile.write(data)
+        if self.get_starttag_text().__str__().find('id="content"')!=-1 \
+         or self.get_starttag_text()=='<p>':
+          print('+++'+self.get_starttag_text().__str__())
+          self.txtfile.write(self.unescape(data))
         if self.get_starttag_text()=='<br>':
           self.txtfile.write('\n\t'+data)
         if self.get_starttag_text()=='<title>' and not self.titled:
           print '----------------------------'+data+'****'
           print type(data)
           self.txtfile=open(data.decode('utf8')+'.txt','w')
+          self.txtfile.write('\t'+data+'\n'+'\t')
 """
     def handle_comment(self, data):
         print "Comment  :", data
